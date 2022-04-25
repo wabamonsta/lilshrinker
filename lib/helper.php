@@ -2,7 +2,7 @@
 
 class helperUtilities
 {
-
+    public  $result = '';
     public function render($view, $params = null)
     {
         if (isset($param)) {
@@ -26,16 +26,37 @@ class helperUtilities
     public function saveUrl($id, $url)
     {
 
+        $arrContextOptions = array(
+            "ssl" => array(
+                "verify_peer" => false,
+                "verify_peer_name" => false,
+            ),
+        );
+
+
+        $xml = simplexml_load_string(file_get_contents($url, false, stream_context_create($arrContextOptions)));
+        $title = ($xml->head->title[0]);
+
         $file  =  __DIR__ . "/__urllist.inc";
         if (!file_exists($file)) {
             $fp = fopen($file, 'w');
-            fclsoe($fp);
+            fclose($fp);
         }
 
-        $content  = json_decode(file_get_contents($file));
-        array_push($content, ...array($id, $url));
-        if (file_put_contents($file, $content)) {
-            return $_SERVER['SERVER_NAME'] . "/u/" . $id;
+        $content  = json_decode(file_get_contents($file, false, stream_context_create($arrContextOptions)));
+        $shortURL = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://$_SERVER[HTTP_HOST]" . "u/" . $id;
+        $newContent = array(
+            'id' => $id,
+            'title' => $title,
+            'shortenURL' =>  $shortURL,
+            'originalURL' => $url
+        );
+        if (!is_array($content)) {
+            $content = array();
+        }
+        array_push($content, $newContent);
+        if (file_put_contents($file, json_encode($content))) {
+            return $this->toJSON($newContent);
         } else {
             return false;
         }
@@ -56,6 +77,20 @@ class helperUtilities
         if ($_SERVER['REQUEST_METHOD'] != 'GET') {
             http_response_code(401);
             die("Unauthorized method");
+        }
+    }
+
+    public function toJSON($param)
+    {
+        $result  = json_encode($param);
+        $this->result  = $result;
+        return    $this->result;
+    }
+
+    private function show()
+    {
+        if (isset($this->result)) {
+            echo   $this->result;
         }
     }
 }
