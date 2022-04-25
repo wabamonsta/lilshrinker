@@ -7,7 +7,6 @@ class urlRoute
     {
         $getpath  =  $this->getPath();
         $controller = explode("/", $getpath);
-        print_r($controller);
         if (isset($controller[1]) && $controller[1] != '') {
             return ucwords($controller[1]);
         } else {
@@ -15,9 +14,6 @@ class urlRoute
         }
     }
 
-    public function getView()
-    {
-    }
 
     public function getPath()
     {
