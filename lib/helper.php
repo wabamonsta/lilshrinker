@@ -1,6 +1,6 @@
 <?php 
 
-class helperUtilities(){
+class helperUtilities{
 
     /**
      *  Url Shortner : User will submit url to the function and a unique identifier will berpovided
@@ -31,5 +31,3 @@ class helperUtilities(){
 
     }
 }
-
-?>

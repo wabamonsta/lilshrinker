@@ -1,2 +1,5 @@
 <?php
-echo   __DIR__;
+include "lib/helper.php";
+include "lib/route.php";
+$getRoute  = new urlRoute();
+include "controller/controller" . $getRoute->getController() . ".php";
