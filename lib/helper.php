@@ -16,7 +16,12 @@ class helperUtilities
     public function saveUrl($id, $url)
     {
 
-
+        $arrContextOptions = array(
+            "ssl" => array(
+                "verify_peer" => false,
+                "verify_peer_name" => false,
+            ),
+        );
         $title = $this->url_get_title($url);
 
         $file  =  self::urlFileLocation;
@@ -72,6 +77,16 @@ class helperUtilities
         }
     }
 
+    public function getTop100()
+    {
+        $file  = file_get_contents(self::urlFileLocation);
+        $fileToArray  = json_decode($file);
+        $frequencyArraySort = array_column($fileToArray, 'frequency', 'originalURL');
+
+        array_multisort($frequencyArraySort, SORT_DESC, $fileToArray);
+        array_slice($frequencyArraySort, 0, 100);
+        return $this->toJSON($frequencyArraySort);
+    }
     public function POST()
     {
         //Check if user using the correct method

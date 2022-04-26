@@ -13,7 +13,8 @@ class controllerApi  extends helperUtilities
 
                 break;
             case 'GET':
-                echo $this->toJSON(array("Method not assigned"));
+                echo $this->getTop100();
+
                 break;
             default:
                 echo $this->toJSON(array("Method not assigned"));
