@@ -3,6 +3,7 @@
 class helperUtilities
 {
     public  $result = '';
+    const urlFileLocation =    __DIR__ . "/__urllist.inc";
     public function render($view, $params = null)
     {
         if (isset($param)) {
@@ -34,10 +35,15 @@ class helperUtilities
         );
 
 
-        $xml = simplexml_load_string(file_get_contents($url, false, stream_context_create($arrContextOptions)));
-        $title = ($xml->head->title[0]);
+        $xml = @simplexml_load_string(file_get_contents($url, true, stream_context_create($arrContextOptions)));
+        if (isset($xml->head->title[0])) {
+            $title = ($xml->head->title[0]);
+        } else {
+            $title = null;
+        }
 
-        $file  =  __DIR__ . "/__urllist.inc";
+        die(print_r($xml));
+        $file  =  self::urlFileLocation;
         if (!file_exists($file)) {
             $fp = fopen($file, 'w');
             fclose($fp);
@@ -85,6 +91,21 @@ class helperUtilities
         $result  = json_encode($param);
         $this->result  = $result;
         return    $this->result;
+    }
+
+    public function getURL($id)
+    {
+        $file  = file_get_contents(self::urlFileLocation);
+        $fileToArray  = json_decode($file);
+
+        foreach ($fileToArray as $urlItem) {
+            if ($id) {
+                if ($urlItem->id == $id) {
+                    return $urlItem->originalURL;
+                }
+            }
+        }
+        return false;
     }
 
     private function show()
