@@ -1,16 +1,15 @@
-<?php 
-    class controllerIndex extends helperUtilities{
+<?php
+class controllerIndex extends helperUtilities
+{
 
-        public function index(){
-            //save url here
-            if($_POST['submit']){
-
-
-            }
-            $this->render("createlink");
-            //get view
-
+    public function index()
+    {
+        $param = ['title' => 'Shrinker'];
+        if ($_POST['submit']) {
         }
+        $this->render("createlink", $param);
+        //get view
 
     }
-    $export  = new controllerIndex();
+}
+$export  = new controllerIndex();

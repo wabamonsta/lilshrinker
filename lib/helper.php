@@ -4,12 +4,18 @@ class helperUtilities
 {
     public  $result = '';
     const urlFileLocation =    __DIR__ . "/__urllist.inc";
-    public function render($view, $params = null)
+    public function render($view, $params = null, $headers = true)
     {
         if (isset($param)) {
             extract($param);
         }
-        include "view/" . $view . ".php";
+        if ($headers) {
+            include "view/header.php";
+            include "view/" . $view . ".php";
+            include "view/footer.php";
+        } else {
+            include "view/" . $view . ".php";
+        }
     }
 
 
