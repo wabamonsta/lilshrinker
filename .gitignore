@@ -1,4 +1,4 @@
 *.log
 *.inc
-*.gitignore
-__*.*
+lib/__urllist.inc
+git 
