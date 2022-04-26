@@ -13,36 +13,12 @@ class helperUtilities
     }
 
 
-    /**
-     *  Url Shortner : User will submit url to the function and a unique identifier will berpovided
-     * @param $url 
-     * @return: [uniqueid, originalurl]
-     */
-    public function urlshortener($url)
-    {
-
-        return array(uniqid(), $url);
-    }
-
     public function saveUrl($id, $url)
     {
 
-        $arrContextOptions = array(
-            "ssl" => array(
-                "verify_peer" => false,
-                "verify_peer_name" => false,
-            ),
-        );
 
+        $title = $this->url_get_title($url);
 
-        $xml = @simplexml_load_string(file_get_contents($url, true, stream_context_create($arrContextOptions)));
-        if (isset($xml->head->title[0])) {
-            $title = ($xml->head->title[0]);
-        } else {
-            $title = null;
-        }
-
-        die(print_r($xml));
         $file  =  self::urlFileLocation;
         if (!file_exists($file)) {
             $fp = fopen($file, 'w');
@@ -50,7 +26,7 @@ class helperUtilities
         }
 
         $content  = json_decode(file_get_contents($file, false, stream_context_create($arrContextOptions)));
-        $shortURL = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://$_SERVER[HTTP_HOST]" . "u/" . $id;
+        $shortURL = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://$_SERVER[HTTP_HOST]" . "/u/" . $id;
         $newContent = array(
             'id' => $id,
             'title' => $title,
@@ -112,6 +88,22 @@ class helperUtilities
     {
         if (isset($this->result)) {
             echo   $this->result;
+        }
+    }
+
+    public function url_get_title($url)
+    {
+        $arrContextOptions = array(
+            "ssl" => array(
+                "verify_peer" => false,
+                "verify_peer_name" => false,
+            ),
+        );
+        $str = file_get_contents($url, false, stream_context_create($arrContextOptions));
+        if (strlen($str) > 0) {
+            $str = trim(preg_replace('/\s+/', ' ', $str)); // supports line breaks inside <title>
+            preg_match("/\<title\>(.*)\<\/title\>/i", $str, $title); // ignore case
+            return $title[1];
         }
     }
 }
