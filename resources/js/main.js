@@ -1,7 +1,7 @@
 jQuery(document).ready(function () {
     navigator.permissions.query({ name: "clipboard-write" }).then((result) => {
         if (result.state == "granted" || result.state == "prompt") {
-            alert("Write access ranted!");
+            //alert("Write access ranted!");
         }
     });
 
