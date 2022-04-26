@@ -4,6 +4,18 @@ class helperUtilities
 {
     public  $result = '';
     const urlFileLocation =    __DIR__ . "/__urllist.inc";
+
+
+    function __construct()
+    {
+        // Create file if it dont exist
+        $file  =  self::urlFileLocation;
+        if (!file_exists($file)) {
+            $fp = fopen($file, 'w');
+            fclose($fp);
+        }
+    }
+
     public function render($view, $params = null, $headers = true)
     {
         if (isset($params)) {
