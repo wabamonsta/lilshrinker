@@ -26,17 +26,45 @@ class helperUtilities
         }
 
         $content  = json_decode(file_get_contents($file, false, stream_context_create($arrContextOptions)));
+
         $shortURL = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://$_SERVER[HTTP_HOST]" . "/u/" . $id;
         $newContent = array(
             'id' => $id,
             'title' => $title,
             'shortenURL' =>  $shortURL,
-            'originalURL' => $url
+            'originalURL' => $url,
+            'frequency' => 0
         );
+
+
         if (!is_array($content)) {
             $content = array();
         }
-        array_push($content, $newContent);
+
+        // Check if Url exist and if this is true increase the frequency by 1 
+        $already_exist = 0;
+        $i = 0; // content index
+        foreach ($content as $contentItem) {
+
+            if ($newContent['originalURL'] == $contentItem->originalURL) {
+                $already_exist  = 1;
+                $content[$i]->frequency = $contentItem->frequency + 1; // assign incrementation
+                $shortURL = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://$_SERVER[HTTP_HOST]" . "/u/" .  $contentItem->id;
+                //Set New Content ID for reference
+                $newContent['id'] = $contentItem->id;
+                $newContent['shortenURL'] = $shortURL;
+                $newContent['frequency'] = $content[$i]->frequency;
+            }
+            $i++;
+        }
+
+
+        if ($already_exist) {
+            $content  = $content;
+        } else {
+            array_push($content, $newContent);
+        }
+
         if (file_put_contents($file, json_encode($content))) {
             return $this->toJSON($newContent);
         } else {
