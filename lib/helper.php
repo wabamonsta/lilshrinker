@@ -18,6 +18,7 @@ class helperUtilities
 
     public function render($view, $params = null, $headers = true)
     {
+
         if (isset($params)) {
             extract($params);
         }

@@ -13,9 +13,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="//cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css">
-    <link rel="stylesheet" href="/resources/css/main.css">
+    <link rel="stylesheet" href="<?php echo siteURL; ?>/resources/css/main.css">
     <script src="//cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
-    <script src="/resources/js/main.js"></script>
+    <script src="<?php echo siteURL; ?>/resources/js/main.js"></script>
 
 </head>
 
