@@ -6,8 +6,8 @@ class helperUtilities
     const urlFileLocation =    __DIR__ . "/__urllist.inc";
     public function render($view, $params = null, $headers = true)
     {
-        if (isset($param)) {
-            extract($param);
+        if (isset($params)) {
+            extract($params);
         }
         if ($headers) {
             include "view/header.php";
@@ -44,7 +44,7 @@ class helperUtilities
             'title' => $title,
             'shortenURL' =>  $shortURL,
             'originalURL' => $url,
-            'frequency' => 0
+            'frequency' => 1
         );
 
 
@@ -91,7 +91,12 @@ class helperUtilities
 
         array_multisort($frequencyArraySort, SORT_DESC, $fileToArray);
         array_slice($frequencyArraySort, 0, 100);
-        return $this->toJSON($frequencyArraySort);
+        $newFreqArray = [];
+        foreach ($frequencyArraySort as $key => $val) {
+            $newFreqArray[] = array("originalURL" => $key, "frequency" => $val);
+        }
+
+        return $this->toJSON($newFreqArray);
     }
     public function POST()
     {

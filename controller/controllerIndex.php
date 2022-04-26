@@ -4,9 +4,7 @@ class controllerIndex extends helperUtilities
 
     public function index()
     {
-        $param = ['title' => 'Shrinker'];
-        if ($_POST['submit']) {
-        }
+        $param = ['title' => 'LiL URL'];
         $this->render("createlink", $param);
         //get view
 
