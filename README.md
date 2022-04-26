@@ -2,6 +2,10 @@
 
 Simple URL shortner with basic interface and API.
 
+## DEMO
+
+https://lilshrinker.herokuapp.com/
+
 ## Language
 
 - PHP
